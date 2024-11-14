@@ -8,7 +8,10 @@ dotenv.config();
 
 // Create Express app
 const app = express();
-
+// Define the root route
+app.get('/', (req, res) => {
+  res.send('Welcome to the User Service API');  // Root route message
+});
 // Middleware to parse JSON requests
 app.use(express.json());
 
