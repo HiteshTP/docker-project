@@ -1,0 +1,16 @@
+{
+  "name": "account-service",
+  "version": "1.0.0",
+  "description": "Account service for online ATM project",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.10.9",
+    "dotenv": "^10.0.0"
+  },
+  "author": "Your Name",
+  "license": "ISC"
+}
