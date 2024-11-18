@@ -1,1 +1,45 @@
 
+version: '3.9'
+services:
+  frontend:
+    container_name: frontapp
+    build: ./frontend
+    ports:
+      - "80:80"
+    networks:
+      - atm-networks
+    depends_on:
+      - user-service
+      - mongo
+
+  user-service:
+    container_name: server
+    build: ./user-service
+    ports:
+      - "3000:3000"
+    environment:
+      - ./user-service/.env
+    networks:
+      - atm-networks
+    depends_on :
+      - mongo
+    volumes:
+      - atm-volume:/user-service-data
+
+  mongo:
+    container_name: database
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    networks:
+      - atm-networks
+    volumes:
+      - mongo-data:/data/db
+
+networks:
+  atm-networks:
+    driver: bridge
+
+volumes:
+  mongo-data:
+  atm-volume:
