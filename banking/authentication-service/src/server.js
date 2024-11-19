@@ -7,6 +7,9 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
+app.get('/', (req, res) => {
+  res.send('Welcome to the Authentication Service!');
+});
 
 // Routes
 app.use("/api/auth", authRoutes);
