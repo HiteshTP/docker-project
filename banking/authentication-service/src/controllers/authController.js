@@ -1,47 +1,53 @@
-const User = require("../models/userModel");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { Client } = require('pg');
+const dotenv = require('dotenv');
 
-const registerUser = async (req, res) => {
+dotenv.config();
+
+const client = new Client({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+});
+
+client.connect();
+
+const register = async (req, res) => {
+  const { username, password } = req.body;
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const query = 'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id, username';
+  
   try {
-    const { username, password } = req.body;
-
-    // Check if user exists
-    const userExists = await User.findOne({ username });
-    if (userExists) return res.status(400).json({ message: "User already exists" });
-
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create new user
-    const user = new User({ username, password: hashedPassword });
-    await user.save();
-
-    res.status(201).json({ message: "User registered successfully" });
+    const result = await client.query(query, [username, hashedPassword]);
+    const user = result.rows[0];
+    res.status(201).json({ id: user.id, username: user.username });
   } catch (error) {
-    res.status(500).json({ message: "Error registering user", error });
+    res.status(500).json({ message: 'Error registering user' });
   }
 };
 
-const loginUser = async (req, res) => {
+const login = async (req, res) => {
+  const { username, password } = req.body;
+
+  const query = 'SELECT * FROM users WHERE username = $1';
+  
   try {
-    const { username, password } = req.body;
+    const result = await client.query(query, [username]);
+    const user = result.rows[0];
 
-    // Check if user exists
-    const user = await User.findOne({ username });
-    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
 
-    // Validate password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
-
-    // Generate JWT
-    const token = jwt.sign({ id: user._id }, "your_jwt_secret", { expiresIn: "1h" });
-
-    res.json({ message: "Login successful", token });
+    const token = jwt.sign({ userId: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token });
   } catch (error) {
-    res.status(500).json({ message: "Error logging in", error });
+    res.status(500).json({ message: 'Error logging in' });
   }
 };
 
-module.exports = { registerUser, loginUser };
+module.exports = { register, login };
