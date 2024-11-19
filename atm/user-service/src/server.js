@@ -4,6 +4,9 @@ const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
 
 dotenv.config();
+
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://mongo_db:27017/online_atm';
+
 const app = express();
 
 app.use(express.json());
