@@ -1,10 +1,10 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import LoginPage from "./pages/LoginPage";
-import AccountPage from "./pages/AccountPage";
-import TransactionsPage from "./pages/TransactionsPage";
-import AdminPage from "./pages/AdminPage";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import LoginPage from './pages/LoginPage';
+import AccountPage from './pages/AccountPage';
+import TransactionsPage from './pages/TransactionsPage';
+import AdminPage from './pages/AdminPage';
 
 function App() {
   return (
@@ -12,7 +12,6 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/transactions" element={<TransactionsPage />} />
         <Route path="/admin" element={<AdminPage />} />
