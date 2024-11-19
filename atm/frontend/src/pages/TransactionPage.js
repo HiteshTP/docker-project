@@ -1,20 +1,15 @@
-import React, { useState, useEffect } from "react";
-import TransactionHistory from "../components/TransactionHistory";
+import React from 'react';
+import TransactionHistory from '../components/TransactionHistory';
+
+const transactions = [
+  { date: '2024-11-01', amount: '$500', type: 'Deposit' },
+  { date: '2024-11-02', amount: '$200', type: 'Withdrawal' },
+];
 
 const TransactionPage = () => {
-  const [transactions, setTransactions] = useState([]);
-
-  useEffect(() => {
-    // Fetch transaction data from an API (Mock data here)
-    setTransactions([
-      { date: "2024-11-01", amount: 100, type: "Deposit" },
-      { date: "2024-11-05", amount: 50, type: "Withdrawal" },
-    ]);
-  }, []);
-
   return (
     <div>
-      <h2>Transactions</h2>
+      <h1>Transactions</h1>
       <TransactionHistory transactions={transactions} />
     </div>
   );
