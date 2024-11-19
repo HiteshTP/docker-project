@@ -1,31 +1,21 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .navbar {
-    background-color: #333;
-    color: white;
-    padding: 1rem;
-  }
-  
-  .navbar ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .navbar ul li {
-    display: inline;
-    margin-right: 1rem;
-  }
-  
-  .navbar ul li a {
-    color: white;
-    text-decoration: none;
-  }
-  
-  h2 {
-    color: #333;
-  }
-  
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+nav {
+  background-color: #0044cc;
+  padding: 1rem;
+  color: white;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  margin-right: 1rem;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
