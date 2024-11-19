@@ -1,24 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
 
-function DashboardCard({ title, description, link }) {
-  return (
-    <div
-      style={{
-        border: "1px solid #ccc",
-        padding: "16px",
-        borderRadius: "8px",
-        textAlign: "center",
-        width: "200px",
-      }}
-    >
-      <h3>{title}</h3>
-      <p>{description}</p>
-      <Link to={link} style={{ color: "#007bff", textDecoration: "none" }}>
-        Go
-      </Link>
-    </div>
-  );
+function Dashboard() {
+  return <h1>Welcome to your Dashboard!</h1>;
 }
 
-export default DashboardCard;
+export default Dashboard;
