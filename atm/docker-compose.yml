@@ -26,7 +26,7 @@ services:
     volumes:
       - atm-volume:/user-service-data
 
-  mongo:
+  database:
     container_name: database
     image: mongo:latest
     ports:
