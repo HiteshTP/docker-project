@@ -1,15 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const { registerUser, loginUser, getUserProfile } = require('../controllers/userController');
-const authMiddleware = require('../middleware/authMiddleware');
+const mongoose = require('mongoose');
 
-// Route for user registration
-router.post('/register', registerUser);
+const userSchema = mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+});
 
-// Route for user login
-router.post('/login', loginUser);
-
-// Route for getting user profile (protected route)
-router.get('/profile', authMiddleware, getUserProfile);
-
-module.exports = router;
+module.exports = mongoose.model('User', userSchema);
