@@ -6,8 +6,9 @@ const voteRoutes = require("./routes/voteRoutes");
 const app = express();
 const port = 5000;
 
-app.use(cors());
-app.use(express.json());
+// Middleware
+app.use(cors()); // To allow requests from different domains
+app.use(express.json()); // To parse JSON request bodies
 
 // MongoDB connection
 mongoose
@@ -15,10 +16,10 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
-// Routes
+// Use vote routes for voting-related API
 app.use("/api", voteRoutes);
 
+// Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
-
