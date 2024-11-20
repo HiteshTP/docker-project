@@ -1,18 +1,50 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import VotingPage from "./pages/VotingPage";
-import ResultsPage from "./pages/ResultsPage";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function App() {
+  const [votes, setVotes] = useState([]);
+  const [selectedOption, setSelectedOption] = useState("");
+
+  useEffect(() => {
+    // Fetch the voting options from the backend
+    axios
+      .get("http://localhost:5000/api/votes")
+      .then((response) => {
+        setVotes(response.data);
+      })
+      .catch((error) => console.error("Error fetching votes", error));
+  }, []);
+
+  const handleVote = () => {
+    if (selectedOption) {
+      axios
+        .post("http://localhost:5000/api/vote", { option: selectedOption })
+        .then((response) => {
+          alert("Vote submitted successfully!");
+          setVotes(response.data);
+        })
+        .catch((error) => console.error("Error submitting vote", error));
+    }
+  };
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/vote" element={<VotingPage />} />
-        <Route path="/results" element={<ResultsPage />} />
-      </Routes>
-    </Router>
+    <div className="App">
+      <h1>Vote for your favorite option!</h1>
+      <div>
+        {votes.map((voteOption) => (
+          <div key={voteOption._id}>
+            <input
+              type="radio"
+              name="vote"
+              value={voteOption._id}
+              onChange={(e) => setSelectedOption(e.target.value)}
+            />
+            {voteOption.name}
+          </div>
+        ))}
+      </div>
+      <button onClick={handleVote}>Submit Vote</button>
+    </div>
   );
 }
 
