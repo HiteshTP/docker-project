@@ -1,22 +1,19 @@
-import React, { useState } from 'react';
-import VoteForm from './components/VoteForm';
-import VoteList from './components/VoteList';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import VotingPage from "./pages/VotingPage";
+import ResultsPage from "./pages/ResultsPage";
 
-const App = () => {
-    const [votes, setVotes] = useState([]);
-
-    const handleVote = (candidate) => {
-        setVotes([...votes, candidate]);
-    };
-
-    return (
-        <div>
-            <h1>Voting App</h1>
-            <VoteForm onVote={handleVote} />
-            <h2>Vote List</h2>
-            <VoteList votes={votes} />
-        </div>
-    );
-};
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/vote" element={<VotingPage />} />
+        <Route path="/results" element={<ResultsPage />} />
+      </Routes>
+    </Router>
+  );
+}
 
 export default App;
