@@ -10,6 +10,10 @@ mongoose
   .connect("mongodb://database:27017/voting-app", { useNewUrlParser: true })
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error(err));
+// Define a default route for "/"
+app.get("/", (req, res) => {
+  res.send("Welcome to the Voting App Backend!");
+});
 
 app.use("/api/votes", voteRoutes);
 app.use("/api/results", resultRoutes);
