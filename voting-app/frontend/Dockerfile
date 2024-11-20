@@ -1,20 +1,13 @@
-FROM node:latest as build
-
+# Use Node.js for building the frontend
+FROM node:16 as build
 WORKDIR /app
-
 COPY package.json ./
-
 RUN npm install
-
-COPY . .
-
+COPY . ./
 RUN npm run build
 
-# Step 2: Serve the frontend
-FROM nginx:latest
-
+# Use nginx for serving the built files
+FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
-
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]
