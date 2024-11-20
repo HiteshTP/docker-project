@@ -19,7 +19,7 @@ function App() {
   const handleVote = () => {
     if (selectedOption) {
       axios
-        .post("http://localhost:5000/api/vote", { option: selectedOption })
+        .post("http://backend:5000/api/vote", { option: selectedOption })
         .then((response) => {
           alert("Vote submitted successfully!");
           setVotes(response.data);
