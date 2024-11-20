@@ -1,14 +1,19 @@
-FROM node:18 AS build
-WORKDIR /app
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json
 COPY package*.json ./
+
+# Install dependencies
 RUN npm install
+
+# Copy application code
 COPY . .
-RUN npm run build
 
-FROM node:18-slim
-WORKDIR /app
-COPY --from=build /app /app
-CMD ["node", "server.js"]
+# Expose the port the app listens to
+EXPOSE 5000
 
-
-
+# Start the server
+CMD ["npm", "start"]
