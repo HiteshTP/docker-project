@@ -1,16 +1,9 @@
 import React from 'react';
-import AppointmentList from '../components/AppointmentList';
 
-const appointments = [
-  { date: '2024-11-21', description: 'Consultation with Dr. Smith' },
-  { date: '2024-11-22', description: 'Follow-up with Dr. Johnson' },
-];
-
-const AppointmentPage = () => (
+const Dashboard = () => (
   <div>
-    <h2>Appointments</h2>
-    <AppointmentList appointments={appointments} />
+    <h2>Welcome to the Dashboard</h2>
   </div>
 );
 
-export default AppointmentPage;
+export default Dashboard;
