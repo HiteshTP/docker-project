@@ -10,7 +10,7 @@ app.use(express.json());
 app.use('/api/votes', voteRoutes);
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/voting-app', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://mongodb:27017/voting-app', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('MongoDB connected');
         app.listen(PORT, () => {
