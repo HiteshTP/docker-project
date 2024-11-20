@@ -3,31 +3,38 @@ const Vote = require("../models/Vote");
 
 const router = express.Router();
 
-// Get all voting options
+// Get all voting options (GET)
 router.get("/votes", async (req, res) => {
   try {
-    const votes = await Vote.find();
-    res.json(votes);
+    const votes = await Vote.find(); // Get all vote options from MongoDB
+    res.json(votes); // Send them as JSON response
   } catch (err) {
-    res.status(500).json({ message: "Error fetching votes" });
+    res.status(500).json({ message: "Error fetching votes", error: err });
   }
 });
 
-// Submit a vote
+// Submit a vote (POST)
 router.post("/vote", async (req, res) => {
+  const { option } = req.body; // The ID of the vote option being selected
+
+  if (!option) {
+    return res.status(400).json({ message: "No option selected" });
+  }
+
   try {
-    const { option } = req.body;
-    const vote = await Vote.findById(option);
-    if (vote) {
-      vote.votes += 1;
-      await vote.save();
-      const updatedVotes = await Vote.find();
-      res.json(updatedVotes);
-    } else {
-      res.status(404).json({ message: "Option not found" });
+    const vote = await Vote.findById(option); // Find the selected vote option by ID
+    if (!vote) {
+      return res.status(404).json({ message: "Option not found" });
     }
+
+    vote.votes += 1; // Increment the vote count
+    await vote.save(); // Save the updated vote option
+
+    // Get the updated list of votes and send as response
+    const updatedVotes = await Vote.find();
+    res.json(updatedVotes);
   } catch (err) {
-    res.status(500).json({ message: "Error submitting vote" });
+    res.status(500).json({ message: "Error submitting vote", error: err });
   }
 });
 
