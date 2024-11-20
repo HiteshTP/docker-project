@@ -1,29 +1,34 @@
-const express = require('express');
-const router = express.Router();
-const Vote = require('../models/Vote');
+const express = require("express");
+const Vote = require("../models/Vote");
 
-// Get all votes
-router.get('/', async (req, res) => {
-    try {
-        const votes = await Vote.find();
-        res.json(votes);
-    } catch (err) {
-        res.status(500).send(err);
-    }
+const router = express.Router();
+
+// Get all voting options
+router.get("/votes", async (req, res) => {
+  try {
+    const votes = await Vote.find();
+    res.json(votes);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching votes" });
+  }
 });
 
-// Add a vote
-router.post('/', async (req, res) => {
-    const vote = new Vote({
-        candidate: req.body.candidate,
-    });
-
-    try {
-        const savedVote = await vote.save();
-        res.status(201).json(savedVote);
-    } catch (err) {
-        res.status(400).send(err);
+// Submit a vote
+router.post("/vote", async (req, res) => {
+  try {
+    const { option } = req.body;
+    const vote = await Vote.findById(option);
+    if (vote) {
+      vote.votes += 1;
+      await vote.save();
+      const updatedVotes = await Vote.find();
+      res.json(updatedVotes);
+    } else {
+      res.status(404).json({ message: "Option not found" });
     }
+  } catch (err) {
+    res.status(500).json({ message: "Error submitting vote" });
+  }
 });
 
 module.exports = router;
