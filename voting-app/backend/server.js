@@ -16,6 +16,10 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
+// Route for the root URL (GET /)
+app.get("/", (req, res) => {
+  res.send("Backend is running!");
+});
 // Use vote routes for voting-related API
 app.use("/api", voteRoutes);
 
