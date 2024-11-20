@@ -1,13 +1,7 @@
-FROM node:latest
-
-WORKDIR /usr/src/server
-
-COPY package*.json ./
-
+FROM node:16
+WORKDIR /app
+COPY package.json ./
 RUN npm install
-
-COPY . .
-
-EXPOSE 3000
-
-CMD ["npm", "start"]
+COPY . ./
+EXPOSE 5000
+CMD ["node", "src/server.js"]
