@@ -1,40 +1,40 @@
-version: '3.9'
-services:
-  mongodb:
-    container_name: database
-    image: mongo:latest
-    restart: always
-    volumes:
-      - mongodb:/data/db
-    networks:
-      - voting-net
+version: "3.8"
 
-  backend:
-    container_name: server
-    build: ./backend
+services:
+  frontend:
+    build:
+      context: ./frontend
     ports:
-      - "3000:3000"
-    environment:
-      PORT: 3000
-      MONGODB_URI: mongodb://mongo_db:27017
-      DB_NAME: voting
-    networks:
-      - voting-net
-    depends_on:
-      - mongodb
- frontend:
-   container_name: ./frontend
-   ports:
-     - "80:80"
-    networks:
-      - voting-net
+      - "3000:80"
     depends_on:
       - backend
-      - mongodb
+    networks:
+      - voting-network
 
-     
-networks:
-  voting-net:
-    driver: bridge
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://database:27017/voting-app
+    depends_on:
+      - database
+    networks:
+      - voting-network
+
+  database:
+    image: mongo:5
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - voting-network
+
 volumes:
-  mongodb: {}
+  mongo-data:
+
+networks:
+  voting-network:
