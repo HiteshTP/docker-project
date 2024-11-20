@@ -1,45 +1,66 @@
-
 version: '3.9'
+
 services:
+  # Frontend Service
   frontend:
-    container_name: frontapp
     build: ./frontend
     ports:
       - "80:80"
-    networks:
-      - atm-networks
     depends_on:
-      - user-service
-      - mongo
-
-  user-service:
-    container_name: server
-    build: ./user-service
-    ports:
-      - "3000:3000"
-    environment:
-      - ./user-service/.env
+      - patient-service
+      - appointment-service
+      - notification-service
     networks:
-      - atm-networks
-    depends_on :
-      - mongo
-    volumes:
-      - atm-volume:/user-service-data
+      - hospital-net
 
-  database:
-    container_name: database
+  # Patient Service
+  patient-service:
+    build: ./patient-service
+    ports:
+      - "4000:4000"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/hospital-db
+    depends_on:
+      - mongodb
+    networks:
+      - hospital-net
+
+  # Appointment Service
+  appointment-service:
+    build: ./appointment-service
+    ports:
+      - "4001:4001"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/hospital
+    depends_on:
+      - mongodb
+    networks:
+      - hospital-net
+
+  # Notification Service
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "4002:4002"
+    depends_on:
+      - mongodb
+    networks:
+      - hospital-net
+
+  # MongoDB Database Service
+  mongodb:
     image: mongo:latest
+    container_name: mongodb
     ports:
       - "27017:27017"
-    networks:
-      - atm-networks
     volumes:
       - mongo-data:/data/db
+    networks:
+      - hospital-net
 
 networks:
-  atm-networks:
+  hospital-net:
     driver: bridge
 
 volumes:
   mongo-data:
-  atm-volume:
