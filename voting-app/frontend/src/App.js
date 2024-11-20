@@ -5,8 +5,8 @@ function App() {
   const [votes, setVotes] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
 
+  // Fetching the voting options from the backend when the app loads
   useEffect(() => {
-    // Fetch the voting options from the backend
     axios
       .get("http://localhost:5000/api/votes")
       .then((response) => {
@@ -15,6 +15,7 @@ function App() {
       .catch((error) => console.error("Error fetching votes", error));
   }, []);
 
+  // Handling the vote submission
   const handleVote = () => {
     if (selectedOption) {
       axios
