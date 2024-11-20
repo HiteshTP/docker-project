@@ -8,7 +8,7 @@ function App() {
   // Fetching the voting options from the backend when the app loads
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/votes")
+      .get("http://backend:5000/api/votes")
       .then((response) => {
         setVotes(response.data);
       })
