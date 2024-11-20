@@ -6,17 +6,35 @@ services:
     restart: always
     volumes:
       - mongodb:/data/db
+    networks:
+      - voting-net
 
   backend:
+    container_name: server
     build: ./backend
     ports:
       - "3000:3000"
     environment:
       PORT: 3000
       MONGODB_URI: mongodb://mongo_db:27017
-      DB_NAME: my_db
+      DB_NAME: voting
+    networks:
+      - voting-net
     depends_on:
       - mongodb
+ frontend:
+   container_name: ./frontend
+   ports:
+     - "80:80"
+    networks:
+      - voting-net
+    depends_on:
+      - backend
+      - mongodb
 
+     
+networks:
+  voting-net:
+    driver: bridge
 volumes:
   mongodb: {}
