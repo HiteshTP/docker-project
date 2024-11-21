@@ -1,36 +1,44 @@
-version: '3'
+version: '3.9'
 services:
   frontend: 
-    container_name: frontend
-    build: 
-      context: frontend/
-    image: fronted-image
+    container_name: frontapp
+    build: ./frontend
     ports: 
       - "80:80"
     depends_on:
-      - backend
+      - database
+    networks:
+      - mynet
+  
   backend:
-    container_name: backend
-    build: 
-      context: backend/
-    image: backend-image
+    container_name: server
+    build: ./backend
     ports: 
       - "3500:3500"
     environment:
-      - host=db
+      - host=mysql
       - user=root
-      - password=rootpassword
-      - database=exampledb
-
+      - password=mysql123
+      - database=school
     depends_on:
-      - db
-  db:
-    container_name: mysql-container
+      - database
+    networks:
+      - mynet
+  
+  database:
+    container_name: mysql
     image: mysql:latest
     environment:
       - MYSQL_ROOT_PASSWORD=mysql123
       - MYSQL_DATABASE=school
+    networks:
+      - mynet
     volumes:
       - mysql-data:/var/lib/mysql
+
 volumes:
   mysql-data:
+networks:
+  mynet:
+    driver: bridge
+    
